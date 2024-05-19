@@ -19,6 +19,8 @@ public class QuizController {
         }
     }
 
+
+
     @PostMapping("/quiz") // quiz 패스로 post요청이 온다면, 요청값을 Code라는 객체로 매핑한 다음 value에 따라 다른 응답
     public ResponseEntity<String> quiz2(@RequestBody Code code) {
         switch (code.value()) {
