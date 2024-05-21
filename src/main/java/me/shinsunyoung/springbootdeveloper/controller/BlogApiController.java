@@ -1,14 +1,19 @@
 package me.shinsunyoung.springbootdeveloper.controller;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.Article;
 import me.shinsunyoung.springbootdeveloper.dto.AddArticleRequest;
+import me.shinsunyoung.springbootdeveloper.dto.ArticleResponse;
+import me.shinsunyoung.springbootdeveloper.dto.UpdateArticleRequest;
 import me.shinsunyoung.springbootdeveloper.service.BlogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
 
 /* 컨트롤러 메서드에는 URL 매핑 GET.. */
 @RequiredArgsConstructor
@@ -29,4 +34,43 @@ public class BlogApiController {
     @RequestBody
     HTTP Request Message Body를 통해 전달된 데이터를 지정한 객체로 역직렬화하는 애노테이션
      */
+
+    @GetMapping("/api/articles")
+    public ResponseEntity<List<ArticleResponse>> findAllArticles() {
+        List<ArticleResponse> articles = blogService.findAll()
+                .stream() // 스트림은 여러 데이터가 모여 있는 컬렉션을 간편하게 처리하기 위한 자바 8 에서 추가된 기능
+                .map(ArticleResponse::new)
+                .toList();
+
+        return ResponseEntity.ok().body(articles);
+    }
+
+    @GetMapping("/api/articles/{id}") // 이름이 파라미터 이름과 같다면 자동 매칭
+    public ResponseEntity<ArticleResponse> findArticle(@PathVariable long id) {
+        Article article = blogService.findById(id);
+
+        return ResponseEntity.ok()
+                .body(new ArticleResponse(article));
+    }
+
+    /*
+    @PathVariable URL 에서 값을 가져오는 애너테이션
+     */
+
+    @DeleteMapping("/api/articles/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable long id) {
+        blogService.delete(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/api/articles/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable long id
+            , @RequestBody UpdateArticleRequest request) {
+
+        Article updatedArticle = blogService.update(id,request);
+
+        return ResponseEntity.ok().body(updatedArticle);
+    }
+
 }

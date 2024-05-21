@@ -31,6 +31,11 @@ public class Article {
         this.content = content;
     }
 
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     /*
     애너 테이션으로 대체
      */
