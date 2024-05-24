@@ -40,17 +40,13 @@ public class BlogViewController {
 쿼리 파라미터: HTTP 요청에서 URL의 끝에 ?로 시작하는 키값, &로 구분함
 e.g. /new-article?id=132
  */
-        @GetMapping("/new-article")
-        public String newArticle(@RequestParam(required = false) Long id, Model model) {
-            if (id == null) {
-                ArticleViewResponse res = new ArticleViewResponse();
-                model.addAttribute("article",res );
-                System.out.println("TEST no::artcile id = " + res.getId());
+    @GetMapping("/new-article")
+    public String newArticle(@RequestParam(required = false) Long id, Model model) {
+        if (id == null) {
+            model.addAttribute("article", new ArticleViewResponse());
         } else {
             Article article = blogService.findById(id);
-            ArticleViewResponse res2 = new ArticleViewResponse(article);
-            model.addAttribute("article", res2);
-            System.out.println("TEST yes::artcile id = " + res2.getId());
+            model.addAttribute("article", new ArticleViewResponse(article));
         }
 
         return "newArticle";
