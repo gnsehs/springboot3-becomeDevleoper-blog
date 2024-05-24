@@ -1,5 +1,6 @@
 package me.shinsunyoung.springbootdeveloper.dto;
 
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.shinsunyoung.springbootdeveloper.domain.Article;
